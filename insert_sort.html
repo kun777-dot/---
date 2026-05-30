@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>直接插入排序 - 源码与运行结果</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 28px;
+        }
+        h2 {
+            font-size: 17px;
+            color: #16213e;
+            margin: 24px 0 12px;
+            padding-left: 10px;
+            border-left: 4px solid #0f3460;
+        }
+        .code-block {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .code-block pre { margin: 0; white-space: pre; }
+
+        .k  { color: #cba6f7; }
+        .t  { color: #f9e2af; }
+        .f  { color: #89b4fa; }
+        .s  { color: #a6e3a1; }
+        .pp { color: #f38ba8; }
+        .n  { color: #fab387; }
+        .m  { color: #e6a0d4; }
+
+        .output-block {
+            background: #1a1a2e;
+            color: #a6e3a1;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .output-block pre { margin: 0; white-space: pre; }
+    </style>
+</head>
+<body>
+
+    <h1>直接插入排序 (Insertion Sort)</h1>
+    <p class="subtitle">哨兵优化版 | 稳定排序 | O(n²) 时间复杂度 | O(1) 空间复杂度</p>
+
+    <h2>源码 (insert_sort.c)</h2>
+    <div class="code-block"><pre><span class="pp">#include</span> <span class="s">&lt;stdio.h&gt;</span>
+
+<span class="k">typedef</span> <span class="t">int</span> <span class="t">KeyType</span>;
+
+<span class="k">typedef</span> <span class="k">struct</span> {
+    <span class="t">KeyType</span> key;
+} <span class="t">RecordType</span>;
+
+<span class="pp">#define</span> <span class="n">MAXSIZE</span> <span class="m">100</span>
+<span class="k">typedef</span> <span class="k">struct</span> {
+    <span class="t">RecordType</span> r[<span class="n">MAXSIZE</span>];
+    <span class="t">int</span> length;
+} <span class="t">SqList</span>;
+
+<span class="t">void</span> <span class="f">InsertSort</span>(<span class="t">SqList</span> *L) {
+    <span class="t">int</span> i, j;
+    <span class="k">for</span> (i = <span class="m">2</span>; i &lt;= L-&gt;length; i++) {
+        <span class="k">if</span> (L-&gt;r[i].key &lt; L-&gt;r[i-<span class="m">1</span>].key) {
+            L-&gt;r[<span class="m">0</span>] = L-&gt;r[i];
+            <span class="k">for</span> (j = i - <span class="m">1</span>; L-&gt;r[j].key &gt; L-&gt;r[<span class="m">0</span>].key; j--) {
+                L-&gt;r[j+<span class="m">1</span>] = L-&gt;r[j];
+            }
+            L-&gt;r[j+<span class="m">1</span>] = L-&gt;r[<span class="m">0</span>];
+        }
+    }
+}
+
+<span class="t">void</span> <span class="f">PrintSqList</span>(<span class="t">SqList</span> *L) {
+    <span class="k">for</span> (<span class="t">int</span> i = <span class="m">1</span>; i &lt;= L-&gt;length; i++) {
+        <span class="f">printf</span>(<span class="s">"%d "</span>, L-&gt;r[i].key);
+    }
+    <span class="f">printf</span>(<span class="s">"\n"</span>);
+}
+
+<span class="t">int</span> <span class="f">main</span>() {
+    <span class="t">SqList</span> L;
+    L.r[<span class="m">1</span>].key = <span class="m">49</span>;
+    L.r[<span class="m">2</span>].key = <span class="m">38</span>;
+    L.r[<span class="m">3</span>].key = <span class="m">65</span>;
+    L.r[<span class="m">4</span>].key = <span class="m">97</span>;
+    L.r[<span class="m">5</span>].key = <span class="m">76</span>;
+    L.r[<span class="m">6</span>].key = <span class="m">13</span>;
+    L.r[<span class="m">7</span>].key = <span class="m">27</span>;
+    L.r[<span class="m">8</span>].key = <span class="m">49</span>;
+    L.length = <span class="m">8</span>;
+
+    <span class="f">printf</span>(<span class="s">"Before sorting: "</span>);
+    <span class="f">PrintSqList</span>(&amp;L);
+
+    <span class="f">InsertSort</span>(&amp;L);
+
+    <span class="f">printf</span>(<span class="s">"After sorting:  "</span>);
+    <span class="f">PrintSqList</span>(&amp;L);
+
+    <span class="k">return</span> <span class="m">0</span>;
+}
+</pre></div>
+
+    <h2>运行结果</h2>
+    <div class="output-block"><pre>Before sorting: 49 38 65 97 76 13 27 49
+After sorting:  13 27 38 49 49 65 76 97</pre></div>
+
+    <h2>算法过程演示</h2>
+    <div class="output-block"><pre>初始关键字: [49] 38 65 97 76 13 27 49*
+i=2: 插入38 → [38 49] 65 97 76 13 27 49*
+i=3: 插入65 → [38 49 65] 97 76 13 27 49*
+i=4: 插入97 → [38 49 65 97] 76 13 27 49*
+i=5: 插入76 → [38 49 65 76 97] 13 27 49*
+i=6: 插入13 → [13 38 49 65 76 97] 27 49*
+i=7: 插入27 → [13 27 38 49 65 76 97] 49*
+i=8: 插入49*→ [13 27 38 49 49* 65 76 97]</pre></div>
+
+</body>
+</html>

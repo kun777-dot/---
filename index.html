@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据结构 - 排序算法</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 16px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 36px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            text-decoration: none;
+            display: block;
+            color: #333;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            font-size: 18px;
+            color: #16213e;
+            margin-bottom: 8px;
+        }
+        .card .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .card .tag {
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: #e8f0fe;
+            color: #0f3460;
+        }
+        .card .desc {
+            font-size: 13px;
+            color: #666;
+            margin-top: 6px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>数据结构 - 排序算法</h1>
+    <p class="subtitle">基于C语言实现 | Gitee Pages 部署</p>
+
+    <a class="card" href="insert_sort.html">
+        <h2>一、直接插入排序</h2>
+        <p class="desc">基于"逐步构造有序子序列"的自适应排序算法，哨兵优化版</p>
+        <div class="tags">
+            <span class="tag">稳定排序</span>
+            <span class="tag">O(n²)</span>
+            <span class="tag">O(1)</span>
+            <span class="tag">哨兵优化</span>
+        </div>
+    </a>
+
+    <p class="footer">jiang-shikun1113 / data-structure---sorting</p>
+</body>
+</html>
