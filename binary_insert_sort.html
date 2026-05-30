@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>折半插入排序 - 源码与运行结果</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 28px;
+        }
+        h2 {
+            font-size: 17px;
+            color: #16213e;
+            margin: 24px 0 12px;
+            padding-left: 10px;
+            border-left: 4px solid #0f3460;
+        }
+        .code-block {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .code-block pre { margin: 0; white-space: pre; }
+
+        .k  { color: #cba6f7; }
+        .t  { color: #f9e2af; }
+        .f  { color: #89b4fa; }
+        .s  { color: #a6e3a1; }
+        .pp { color: #f38ba8; }
+        .n  { color: #fab387; }
+        .m  { color: #e6a0d4; }
+        .c  { color: #6c7086; }
+
+        .output-block {
+            background: #1a1a2e;
+            color: #a6e3a1;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .output-block pre { margin: 0; white-space: pre; }
+        .back-link {
+            display: inline-block;
+            margin-top: 32px;
+            color: #0f3460;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>折半插入排序 (Binary Insertion Sort)</h1>
+    <p class="subtitle">二分查找优化 | 稳定排序 | O(n²) 时间复杂度 | O(1) 空间复杂度</p>
+
+    <h2>源码 (binary_insert_sort.c)</h2>
+    <div class="code-block"><pre><span class="pp">#include</span> <span class="s">&lt;stdio.h&gt;</span>
+
+<span class="t">void</span> <span class="f">BinaryInsertSort</span>(<span class="t">int</span> A[], <span class="t">int</span> n) {
+    <span class="t">int</span> i, j, low, high, mid;
+    <span class="k">for</span> (i = <span class="m">2</span>; i &lt;= n; i++) {
+        A[<span class="m">0</span>] = A[i];
+        low = <span class="m">1</span>;
+        high = i - <span class="m">1</span>;
+        <span class="k">while</span> (low &lt;= high) {
+            mid = (low + high) / <span class="m">2</span>;
+            <span class="k">if</span> (A[mid] &gt; A[<span class="m">0</span>])
+                high = mid - <span class="m">1</span>;
+            <span class="k">else</span>
+                low = mid + <span class="m">1</span>;
+        }
+        <span class="k">for</span> (j = i - <span class="m">1</span>; j &gt;= high + <span class="m">1</span>; j--)
+            A[j + <span class="m">1</span>] = A[j];
+        A[high + <span class="m">1</span>] = A[<span class="m">0</span>];
+    }
+}
+
+<span class="t">void</span> <span class="f">PrintArray</span>(<span class="t">int</span> A[], <span class="t">int</span> n) {
+    <span class="k">for</span> (<span class="t">int</span> i = <span class="m">1</span>; i &lt;= n; i++)
+        <span class="f">printf</span>(<span class="s">"%d "</span>, A[i]);
+    <span class="f">printf</span>(<span class="s">"\n"</span>);
+}
+
+<span class="t">int</span> <span class="f">main</span>() {
+    <span class="t">int</span> A[<span class="m">9</span>] = {<span class="m">0</span>, <span class="m">49</span>, <span class="m">38</span>, <span class="m">65</span>, <span class="m">97</span>, <span class="m">76</span>, <span class="m">13</span>, <span class="m">27</span>, <span class="m">49</span>};
+    <span class="t">int</span> n = <span class="m">8</span>;
+
+    <span class="f">printf</span>(<span class="s">"Before sorting: "</span>);
+    <span class="f">PrintArray</span>(A, n);
+
+    <span class="f">BinaryInsertSort</span>(A, n);
+
+    <span class="f">printf</span>(<span class="s">"After sorting:  "</span>);
+    <span class="f">PrintArray</span>(A, n);
+
+    <span class="k">return</span> <span class="m">0</span>;
+}</pre></div>
+
+    <h2>运行结果</h2>
+    <div class="output-block"><pre>Before sorting: 49 38 65 97 76 13 27 49
+After sorting:  13 27 38 49 49 65 76 97</pre></div>
+
+    <a class="back-link" href="index.html">← 返回首页</a>
+
+</body>
+</html>
