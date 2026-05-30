@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冒泡排序 - 源码与运行结果</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        h1 { text-align: center; font-size: 24px; color: #1a1a2e; margin-bottom: 6px; }
+        .subtitle { text-align: center; font-size: 13px; color: #888; margin-bottom: 28px; }
+        h2 { font-size: 17px; color: #16213e; margin: 24px 0 12px; padding-left: 10px; border-left: 4px solid #0f3460; }
+        h3 { font-size: 15px; color: #16213e; margin: 16px 0 8px; }
+        .code-block {
+            background: #1e1e2e; color: #cdd6f4; border-radius: 8px;
+            padding: 16px; overflow-x: auto; font-size: 14px; line-height: 1.7;
+        }
+        .code-block pre { margin: 0; white-space: pre; }
+        .k  { color: #cba6f7; } .t  { color: #f9e2af; } .f  { color: #89b4fa; }
+        .s  { color: #a6e3a1; } .pp { color: #f38ba8; } .m  { color: #e6a0d4; }
+
+        .output-block {
+            background: #1a1a2e; color: #a6e3a1; border-radius: 8px;
+            padding: 16px; overflow-x: auto; font-size: 14px; line-height: 1.7;
+        }
+        .output-block pre { margin: 0; white-space: pre; }
+
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: center; }
+        th { background: #16213e; color: #fff; }
+        td { background: #fff; }
+
+        .formula { background: #e8f0fe; border-radius: 6px; padding: 12px 16px; margin: 10px 0; font-size: 14px; font-family: Consolas, monospace; }
+        .back-link { display: inline-block; margin-top: 32px; color: #0f3460; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h1>冒泡排序 (Bubble Sort)</h1>
+    <p class="subtitle">交换类排序 | 稳定排序 | O(n²) | O(1) 空间复杂度</p>
+
+    <h2>排序过程</h2>
+    <table>
+        <tr><th>初态</th><td>49</td><td>38</td><td>65</td><td>97</td><td>76</td><td>13</td><td>27</td><td>49*</td></tr>
+        <tr><th>第1趟</th><td>13</td><td>38</td><td>49</td><td>65</td><td>97</td><td>76</td><td>27</td><td>49*</td></tr>
+        <tr><th>最终</th><td>13</td><td>27</td><td>38</td><td>49</td><td>49*</td><td>65</td><td>76</td><td>97</td></tr>
+    </table>
+
+    <h2>源码 (bubble_sort.c)</h2>
+    <h3>公共交换函数</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">swap</span>(<span class="t">int</span> *a, <span class="t">int</span> *b) {
+    <span class="t">int</span> temp = *a;
+    *a = *b;
+    *b = temp;
+    RMN += <span class="m">3</span>;
+}</pre></div>
+
+    <h3>V1.0：基础版本（无优化）</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">BubbleSortV1</span>(<span class="t">int</span> A[], <span class="t">int</span> n) {
+    KCN = <span class="m">0</span>; RMN = <span class="m">0</span>;
+    <span class="k">for</span> (<span class="t">int</span> i = <span class="m">0</span>; i &lt; n - <span class="m">1</span>; i++) {
+        <span class="k">for</span> (<span class="t">int</span> j = n - <span class="m">1</span>; j &gt; i; j--) {
+            KCN++;
+            <span class="k">if</span> (A[j - <span class="m">1</span>] &gt; A[j])
+                <span class="f">swap</span>(&amp;A[j - <span class="m">1</span>], &amp;A[j]);
+        }
+    }
+}</pre></div>
+
+    <h3>V2.0：flag优化版本（有序时提前退出）</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">BubbleSortV2</span>(<span class="t">int</span> A[], <span class="t">int</span> n) {
+    KCN = <span class="m">0</span>; RMN = <span class="m">0</span>;
+    <span class="k">for</span> (<span class="t">int</span> i = <span class="m">0</span>; i &lt; n - <span class="m">1</span>; i++) {
+        <span class="t">bool</span> flag = <span class="k">false</span>;
+        <span class="k">for</span> (<span class="t">int</span> j = n - <span class="m">1</span>; j &gt; i; j--) {
+            KCN++;
+            <span class="k">if</span> (A[j - <span class="m">1</span>] &gt; A[j]) {
+                <span class="f">swap</span>(&amp;A[j - <span class="m">1</span>], &amp;A[j]);
+                flag = <span class="k">true</span>;
+            }
+        }
+        <span class="k">if</span> (!flag) <span class="k">return</span>;
+    }
+}</pre></div>
+
+    <h2>运行结果</h2>
+    <div class="output-block"><pre>Before sorting: 49 38 65 97 76 13 27 49
+
+V1.0 (basic bubble sort):
+After sorting: 13 27 38 49 49 65 76 97
+KCN = 28  RMN = 45
+
+V2.0 (flag-optimized bubble sort):
+After sorting: 13 27 38 49 49 65 76 97
+KCN = 25  RMN = 45</pre></div>
+
+    <h2>KCN / RMN 公式</h2>
+
+    <h3>KCN（关键字比较总次数）</h3>
+    <div class="formula">最好情况（已有序）：KCN = n - 1 = 7<br>
+最坏情况（逆序）：  KCN = n(n-1)/2 = 8×7/2 = 28</div>
+
+    <h3>RMN（记录移动总次数）</h3>
+    <div class="formula">最好情况（已有序）：RMN = 0<br>
+最坏情况（逆序）：  RMN = 3n(n-1)/2 = 3×28 = 84<br>
+（每次交换 = 3次移动）</div>
+
+    <a class="back-link" href="index.html">← 返回首页</a>
+
+</body>
+</html>
