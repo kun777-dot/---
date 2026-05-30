@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基数排序 - 源码与运行结果</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Microsoft YaHei","PingFang SC",sans-serif; max-width:800px; margin:0 auto; padding:24px 16px 40px; background:#f5f5f5; color:#333; }
+        h1 { text-align:center; font-size:24px; color:#1a1a2e; margin-bottom:6px; }
+        .subtitle { text-align:center; font-size:13px; color:#888; margin-bottom:28px; }
+        h2 { font-size:17px; color:#16213e; margin:24px 0 12px; padding-left:10px; border-left:4px solid #0f3460; }
+        h3 { font-size:15px; color:#16213e; margin:16px 0 8px; }
+        .code-block { background:#1e1e2e; color:#cdd6f4; border-radius:8px; padding:16px; overflow-x:auto; font-size:14px; line-height:1.7; }
+        .code-block pre { margin:0; white-space:pre; }
+        .k { color:#cba6f7; } .t { color:#f9e2af; } .f { color:#89b4fa; }
+        .s { color:#a6e3a1; } .pp { color:#f38ba8; } .m { color:#e6a0d4; }
+        .output-block { background:#1a1a2e; color:#a6e3a1; border-radius:8px; padding:16px; overflow-x:auto; font-size:14px; line-height:1.7; }
+        .output-block pre { margin:0; white-space:pre; }
+        table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+        th,td { border:1px solid #ddd; padding:6px 8px; text-align:center; }
+        th { background:#16213e; color:#fff; } td { background:#fff; }
+        .step { background:#e8f0fe; font-weight:bold; white-space:nowrap; }
+        .back-link { display:inline-block; margin-top:32px; color:#0f3460; text-decoration:none; font-size:14px; }
+    </style>
+</head>
+<body>
+
+    <h1>基数排序 (Radix Sort)</h1>
+    <p class="subtitle">非比较类排序 | 稳定排序 | O(d(n+r)) | LSD链式分配收集</p>
+
+    <h2>排序过程（LSD：个位→十位→百位）</h2>
+    <table>
+        <tr><th>初始</th><td>278</td><td>109</td><td>063</td><td>930</td><td>589</td><td>184</td><td>505</td><td>269</td><td>008</td><td>083</td></tr>
+        <tr><td class="step">个位</td><td>930</td><td>063</td><td>083</td><td>184</td><td>505</td><td>278</td><td>008</td><td>109</td><td>589</td><td>269</td></tr>
+        <tr><td class="step">十位</td><td>505</td><td>008</td><td>109</td><td>930</td><td>063</td><td>269</td><td>278</td><td>083</td><td>184</td><td>589</td></tr>
+        <tr><td class="step">百位</td><td>008</td><td>063</td><td>083</td><td>109</td><td>184</td><td>269</td><td>278</td><td>505</td><td>589</td><td>930</td></tr>
+    </table>
+
+    <h2>源码 (radix_sort.c)</h2>
+
+    <h3>分配函数 Distribute</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">Distribute</span>(<span class="t">SLList</span> *L, <span class="t">int</span> i, <span class="t">ArrType</span> f, <span class="t">ArrType</span> e) {
+    <span class="t">int</span> j;
+    <span class="k">for</span> (j = <span class="m">0</span>; j &lt; <span class="n">RADIX</span>; j++)
+        f[j] = e[j] = <span class="m">0</span>;
+    <span class="t">int</span> p = L-&gt;r[<span class="m">0</span>].next;
+    <span class="k">while</span> (p != <span class="m">0</span>) {
+        <span class="t">int</span> ord = L-&gt;r[p].keys[i];
+        <span class="k">if</span> (f[ord] == <span class="m">0</span>)
+            f[ord] = p;
+        <span class="k">else</span>
+            L-&gt;r[e[ord]].next = p;
+        e[ord] = p;
+        p = L-&gt;r[p].next;
+    }
+}</pre></div>
+
+    <h3>收集函数 Collect</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">Collect</span>(<span class="t">SLList</span> *L, <span class="t">ArrType</span> f, <span class="t">ArrType</span> e) {
+    <span class="t">int</span> t, j;
+    <span class="k">for</span> (j = <span class="m">0</span>; j &lt; <span class="n">RADIX</span> &amp;&amp; f[j] == <span class="m">0</span>; j++);
+    L-&gt;r[<span class="m">0</span>].next = f[j];
+    t = e[j];
+    <span class="k">while</span> (j &lt; <span class="n">RADIX</span>) {
+        j++;
+        <span class="k">for</span> (; j &lt; <span class="n">RADIX</span> &amp;&amp; f[j] == <span class="m">0</span>; j++);
+        <span class="k">if</span> (j &lt; <span class="n">RADIX</span> &amp;&amp; f[j] != <span class="m">0</span>) {
+            L-&gt;r[t].next = f[j];
+            t = e[j];
+        }
+    }
+    L-&gt;r[t].next = <span class="m">0</span>;
+}</pre></div>
+
+    <h3>基数排序 RadixSort</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">RadixSort</span>(<span class="t">SLList</span> *L) {
+    <span class="t">ArrType</span> f, e;
+    <span class="k">for</span> (<span class="t">int</span> i = <span class="m">1</span>; i &lt;= <span class="n">MAXBIT</span>; i++) {
+        <span class="f">Distribute</span>(L, i, f, e);
+        <span class="f">Collect</span>(L, f, e);
+    }
+}</pre></div>
+
+    <h2>运行结果</h2>
+    <div class="output-block"><pre>Before sorting: 278 109 63 930 589 184 505 269 8 83
+After sorting:  8 63 83 109 184 269 278 505 589 930</pre></div>
+
+    <a class="back-link" href="index.html">← 返回首页</a>
+
+</body>
+</html>
