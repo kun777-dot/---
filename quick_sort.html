@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>快速排序 - 源码与运行结果</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+            background: #f5f5f5; color: #333;
+        }
+        h1 { text-align: center; font-size: 24px; color: #1a1a2e; margin-bottom: 6px; }
+        .subtitle { text-align: center; font-size: 13px; color: #888; margin-bottom: 28px; }
+        h2 { font-size: 17px; color: #16213e; margin: 24px 0 12px; padding-left: 10px; border-left: 4px solid #0f3460; }
+        h3 { font-size: 15px; color: #16213e; margin: 16px 0 8px; }
+        .code-block {
+            background: #1e1e2e; color: #cdd6f4; border-radius: 8px;
+            padding: 16px; overflow-x: auto; font-size: 14px; line-height: 1.7;
+        }
+        .code-block pre { margin: 0; white-space: pre; }
+        .k  { color: #cba6f7; } .t  { color: #f9e2af; } .f  { color: #89b4fa; }
+        .s  { color: #a6e3a1; } .pp { color: #f38ba8; } .m  { color: #e6a0d4; }
+
+        .output-block {
+            background: #1a1a2e; color: #a6e3a1; border-radius: 8px;
+            padding: 16px; overflow-x: auto; font-size: 14px; line-height: 1.7;
+        }
+        .output-block pre { margin: 0; white-space: pre; }
+
+        .back-link { display: inline-block; margin-top: 32px; color: #0f3460; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h1>快速排序 (Quick Sort)</h1>
+    <p class="subtitle">分治交换排序 | 不稳定排序 | 平均O(nlogn) | 最坏O(n²)</p>
+
+    <h2>排序思路</h2>
+    <p style="font-size:14px;color:#555;">选第一个元素49为枢轴 → 右指针找&lt;49的值(27)移到左边 → 左指针找&gt;49的值(65)移到右边 → 指针相遇放回枢轴 → 递归处理左右子区间</p>
+
+    <h2>源码 (quick_sort.c)</h2>
+
+    <h3>划分函数 Partition</h3>
+    <div class="code-block"><pre><span class="t">int</span> <span class="f">Partition</span>(<span class="t">int</span> A[], <span class="t">int</span> low, <span class="t">int</span> high) {
+    <span class="t">int</span> pivot = A[low];
+    <span class="k">while</span> (low &lt; high) {
+        <span class="k">while</span> (low &lt; high &amp;&amp; A[high] &gt;= pivot) --high;
+        A[low] = A[high];
+        <span class="k">while</span> (low &lt; high &amp;&amp; A[low] &lt;= pivot) ++low;
+        A[high] = A[low];
+    }
+    A[low] = pivot;
+    <span class="k">return</span> low;
+}</pre></div>
+
+    <h3>递归排序 QuickSort</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">QuickSort</span>(<span class="t">int</span> A[], <span class="t">int</span> low, <span class="t">int</span> high) {
+    <span class="k">if</span> (low &lt; high) {
+        <span class="t">int</span> pivotpos = <span class="f">Partition</span>(A, low, high);
+        <span class="f">QuickSort</span>(A, low, pivotpos - <span class="m">1</span>);
+        <span class="f">QuickSort</span>(A, pivotpos + <span class="m">1</span>, high);
+    }
+}</pre></div>
+
+    <h2>运行结果</h2>
+    <div class="output-block"><pre>Before sorting: 49 38 65 97 76 13 27 49
+After sorting:  13 27 38 49 49 65 76 97</pre></div>
+
+    <a class="back-link" href="index.html">← 返回首页</a>
+
+</body>
+</html>
