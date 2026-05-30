@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>归并排序 - 源码与运行结果</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Microsoft YaHei","PingFang SC",sans-serif; max-width:800px; margin:0 auto; padding:24px 16px 40px; background:#f5f5f5; color:#333; }
+        h1 { text-align:center; font-size:24px; color:#1a1a2e; margin-bottom:6px; }
+        .subtitle { text-align:center; font-size:13px; color:#888; margin-bottom:28px; }
+        h2 { font-size:17px; color:#16213e; margin:24px 0 12px; padding-left:10px; border-left:4px solid #0f3460; }
+        h3 { font-size:15px; color:#16213e; margin:16px 0 8px; }
+        .code-block { background:#1e1e2e; color:#cdd6f4; border-radius:8px; padding:16px; overflow-x:auto; font-size:14px; line-height:1.7; }
+        .code-block pre { margin:0; white-space:pre; }
+        .k { color:#cba6f7; } .t { color:#f9e2af; } .f { color:#89b4fa; }
+        .s { color:#a6e3a1; } .pp { color:#f38ba8; } .m { color:#e6a0d4; }
+        .output-block { background:#1a1a2e; color:#a6e3a1; border-radius:8px; padding:16px; overflow-x:auto; font-size:14px; line-height:1.7; }
+        .output-block pre { margin:0; white-space:pre; }
+        table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+        th,td { border:1px solid #ddd; padding:6px 10px; text-align:center; }
+        th { background:#16213e; color:#fff; } td { background:#fff; }
+        .step { background:#e8f0fe; font-weight:bold; white-space:nowrap; }
+        .back-link { display:inline-block; margin-top:32px; color:#0f3460; text-decoration:none; font-size:14px; }
+    </style>
+</head>
+<body>
+
+    <h1>归并排序 (Merge Sort)</h1>
+    <p class="subtitle">分治排序 | 稳定排序 | O(nlogn) | O(n)辅助空间</p>
+
+    <h2>排序过程</h2>
+    <table>
+        <tr><th>初始</th><td>49</td><td>38</td><td>65</td><td>97</td><td>76</td><td>13</td><td>27</td></tr>
+        <tr><td class="step">一趟</td><td>38</td><td>49</td><td>65</td><td>97</td><td>13</td><td>76</td><td>27</td></tr>
+        <tr><td class="step">二趟</td><td>38</td><td>49</td><td>65</td><td>97</td><td>13</td><td>27</td><td>76</td></tr>
+        <tr><td class="step">三趟</td><td>13</td><td>27</td><td>38</td><td>49</td><td>65</td><td>76</td><td>97</td></tr>
+    </table>
+
+    <h2>源码 (merge_sort.c)</h2>
+
+    <h3>合并有序区间 Merge</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">Merge</span>(<span class="t">int</span> A[], <span class="t">int</span> temp[], <span class="t">int</span> low, <span class="t">int</span> mid, <span class="t">int</span> high) {
+    <span class="t">int</span> i = low;
+    <span class="t">int</span> j = mid + <span class="m">1</span>;
+    <span class="t">int</span> k = low;
+
+    <span class="k">while</span> (i &lt;= mid &amp;&amp; j &lt;= high) {
+        <span class="k">if</span> (A[i] &lt;= A[j])
+            temp[k++] = A[i++];
+        <span class="k">else</span>
+            temp[k++] = A[j++];
+    }
+    <span class="k">while</span> (i &lt;= mid)
+        temp[k++] = A[i++];
+    <span class="k">while</span> (j &lt;= high)
+        temp[k++] = A[j++];
+    <span class="k">for</span> (<span class="t">int</span> p = low; p &lt;= high; p++)
+        A[p] = temp[p];
+}</pre></div>
+
+    <h3>递归排序 MergeSort</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">MergeSort</span>(<span class="t">int</span> A[], <span class="t">int</span> temp[], <span class="t">int</span> low, <span class="t">int</span> high) {
+    <span class="k">if</span> (low &lt; high) {
+        <span class="t">int</span> mid = (low + high) / <span class="m">2</span>;
+        <span class="f">MergeSort</span>(A, temp, low, mid);
+        <span class="f">MergeSort</span>(A, temp, mid + <span class="m">1</span>, high);
+        <span class="f">Merge</span>(A, temp, low, mid, high);
+    }
+}</pre></div>
+
+    <h2>运行结果</h2>
+    <div class="output-block"><pre>Before sorting: 49 38 65 97 76 13 27
+After sorting:  13 27 38 49 65 76 97</pre></div>
+
+    <a class="back-link" href="index.html">← 返回首页</a>
+
+</body>
+</html>

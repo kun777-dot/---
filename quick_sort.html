@@ -43,9 +43,9 @@
     <p style="font-size:14px;color:#555;">选第一个元素49为枢轴 → 右指针找&lt;49的值(27)移到左边 → 左指针找&gt;49的值(65)移到右边 → 指针相遇放回枢轴 → 递归处理左右子区间</p>
 
     <h2>源码 (quick_sort.c)</h2>
+    <div class="code-block"><pre><span class="pp">#include</span> <span class="s">&lt;stdio.h&gt;</span>
 
-    <h3>划分函数 Partition</h3>
-    <div class="code-block"><pre><span class="t">int</span> <span class="f">Partition</span>(<span class="t">int</span> A[], <span class="t">int</span> low, <span class="t">int</span> high) {
+<span class="t">int</span> <span class="f">Partition</span>(<span class="t">int</span> A[], <span class="t">int</span> low, <span class="t">int</span> high) {
     <span class="t">int</span> pivot = A[low];
     <span class="k">while</span> (low &lt; high) {
         <span class="k">while</span> (low &lt; high &amp;&amp; A[high] &gt;= pivot) --high;
@@ -55,15 +55,35 @@
     }
     A[low] = pivot;
     <span class="k">return</span> low;
-}</pre></div>
+}
 
-    <h3>递归排序 QuickSort</h3>
-    <div class="code-block"><pre><span class="t">void</span> <span class="f">QuickSort</span>(<span class="t">int</span> A[], <span class="t">int</span> low, <span class="t">int</span> high) {
+<span class="t">void</span> <span class="f">QuickSort</span>(<span class="t">int</span> A[], <span class="t">int</span> low, <span class="t">int</span> high) {
     <span class="k">if</span> (low &lt; high) {
         <span class="t">int</span> pivotpos = <span class="f">Partition</span>(A, low, high);
         <span class="f">QuickSort</span>(A, low, pivotpos - <span class="m">1</span>);
         <span class="f">QuickSort</span>(A, pivotpos + <span class="m">1</span>, high);
     }
+}
+
+<span class="t">void</span> <span class="f">PrintArray</span>(<span class="t">int</span> A[], <span class="t">int</span> n) {
+    <span class="k">for</span> (<span class="t">int</span> i = <span class="m">0</span>; i &lt; n; i++)
+        <span class="f">printf</span>(<span class="s">"%d "</span>, A[i]);
+    <span class="f">printf</span>(<span class="s">"\n"</span>);
+}
+
+<span class="t">int</span> <span class="f">main</span>() {
+    <span class="t">int</span> A[] = {<span class="m">49</span>, <span class="m">38</span>, <span class="m">65</span>, <span class="m">97</span>, <span class="m">76</span>, <span class="m">13</span>, <span class="m">27</span>, <span class="m">49</span>};
+    <span class="t">int</span> n = <span class="m">8</span>;
+
+    <span class="f">printf</span>(<span class="s">"Before sorting: "</span>);
+    <span class="f">PrintArray</span>(A, n);
+
+    <span class="f">QuickSort</span>(A, <span class="m">0</span>, n - <span class="m">1</span>);
+
+    <span class="f">printf</span>(<span class="s">"After sorting:  "</span>);
+    <span class="f">PrintArray</span>(A, n);
+
+    <span class="k">return</span> <span class="m">0</span>;
 }</pre></div>
 
     <h2>运行结果</h2>
