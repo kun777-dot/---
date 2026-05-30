@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>堆排序 - 源码与运行结果</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Microsoft YaHei","PingFang SC",sans-serif; max-width:800px; margin:0 auto; padding:24px 16px 40px; background:#f5f5f5; color:#333; }
+        h1 { text-align:center; font-size:24px; color:#1a1a2e; margin-bottom:6px; }
+        .subtitle { text-align:center; font-size:13px; color:#888; margin-bottom:28px; }
+        h2 { font-size:17px; color:#16213e; margin:24px 0 12px; padding-left:10px; border-left:4px solid #0f3460; }
+        h3 { font-size:15px; color:#16213e; margin:16px 0 8px; }
+        .code-block { background:#1e1e2e; color:#cdd6f4; border-radius:8px; padding:16px; overflow-x:auto; font-size:14px; line-height:1.7; }
+        .code-block pre { margin:0; white-space:pre; }
+        .k { color:#cba6f7; } .t { color:#f9e2af; } .f { color:#89b4fa; }
+        .s { color:#a6e3a1; } .pp { color:#f38ba8; } .m { color:#e6a0d4; }
+        .output-block { background:#1a1a2e; color:#a6e3a1; border-radius:8px; padding:16px; overflow-x:auto; font-size:14px; line-height:1.7; }
+        .output-block pre { margin:0; white-space:pre; }
+        .back-link { display:inline-block; margin-top:32px; color:#0f3460; text-decoration:none; font-size:14px; }
+    </style>
+</head>
+<body>
+
+    <h1>堆排序 (Heap Sort)</h1>
+    <p class="subtitle">树形选择排序 | 不稳定排序 | O(nlogn) | O(1)空间复杂度</p>
+
+    <h2>算法流程</h2>
+    <p style="font-size:14px;color:#555;">建大根堆 → 堆顶(最大值)与堆尾交换归位 → 筛选调整剩余元素为新堆 → 循环至全部有序</p>
+
+    <h2>源码 (heap_sort.c)</h2>
+
+    <h3>筛选调整 HeapAdjust</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">HeapAdjust</span>(<span class="t">SqList</span> *L, <span class="t">int</span> s, <span class="t">int</span> m) {
+    <span class="t">RecordType</span> rc = L-&gt;r[s];
+    <span class="t">int</span> j;
+    <span class="k">for</span> (j = <span class="m">2</span> * s; j &lt;= m; j = j * <span class="m">2</span>) {
+        <span class="k">if</span> (j &lt; m &amp;&amp; L-&gt;r[j].key &lt; L-&gt;r[j + <span class="m">1</span>].key)
+            j++;
+        <span class="k">if</span> (rc.key &gt;= L-&gt;r[j].key)
+            <span class="k">break</span>;
+        L-&gt;r[s] = L-&gt;r[j];
+        s = j;
+    }
+    L-&gt;r[s] = rc;
+}</pre></div>
+
+    <h3>初始建堆 CreatHeap</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">CreatHeap</span>(<span class="t">SqList</span> *L) {
+    <span class="t">int</span> n = L-&gt;length;
+    <span class="k">for</span> (<span class="t">int</span> i = n / <span class="m">2</span>; i &gt; <span class="m">0</span>; i--)
+        <span class="f">HeapAdjust</span>(L, i, n);
+}</pre></div>
+
+    <h3>堆排序 HeapSort</h3>
+    <div class="code-block"><pre><span class="t">void</span> <span class="f">HeapSort</span>(<span class="t">SqList</span> *L) {
+    <span class="f">CreatHeap</span>(L);
+    <span class="k">for</span> (<span class="t">int</span> i = L-&gt;length; i &gt; <span class="m">1</span>; i--) {
+        <span class="t">RecordType</span> temp = L-&gt;r[<span class="m">1</span>];
+        L-&gt;r[<span class="m">1</span>] = L-&gt;r[i];
+        L-&gt;r[i] = temp;
+        <span class="f">HeapAdjust</span>(L, <span class="m">1</span>, i - <span class="m">1</span>);
+    }
+}</pre></div>
+
+    <h2>运行结果</h2>
+    <div class="output-block"><pre>Before sorting: 49 38 65 97 76 13 27 49
+After sorting:  13 27 38 49 49 65 76 97</pre></div>
+
+    <a class="back-link" href="index.html">← 返回首页</a>
+
+</body>
+</html>
